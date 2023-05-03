@@ -1,54 +1,89 @@
 package com.lecheros.display.widgets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Widget {
 
-	protected float x;
-	protected float y;
+	protected Vector2 pos;
 	protected float w;
 	protected float h;
-	
-	protected BitmapFont font;
+
 	protected GlyphLayout layout;
-	
+
+	protected Color renderColor;
 	protected Color border;
 	protected Color background;
-	
+
 	protected boolean mouseDown;
 	protected boolean focused;
-	
-	public Widget(float x, float y, float w, float h, BitmapFont font) {
-		this.x = x;
-		this.y = y;
+
+	public Widget(float x, float y, float w, float h) {
+		this.pos = new Vector2(x, y);
 		this.w = w;
 		this.h = h;
-		this.font = font;
 		this.layout = new GlyphLayout();
 		this.border = Color.BLACK;
 		this.background = Color.GRAY;
 	}
-	
+
+	public void keyDown(int key) {
+
+	}
+
+	public void keyUp(int key) {
+
+	}
+
+	protected void pushColor(ShapeRenderer sr) {
+		renderColor = sr.getColor();
+	}
+
+	protected void popColor(ShapeRenderer sr) {
+		if (renderColor != null) {
+			sr.setColor(renderColor);
+		}
+	}
+
+	protected void enableTransparency() {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+	}
+
+	protected void disableTransparency() {
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+	}
+
 	// Getters and setters
+
+	public Vector2 getPos() {
+		return pos;
+	}
+
+	public void setPos(float x, float y) {
+		this.pos.set(x, y);
+	}
 	
 	public float getX() {
-		return x;
+		return pos.x;
 	}
 
 	public void setX(float x) {
-		this.x = x;
+		this.pos.x = x;
 	}
 
 	public float getY() {
-		return y;
+		return pos.y;
 	}
 
 	public void setY(float y) {
-		this.y = y;
+		this.pos.y = y;
 	}
 
 	public float getW() {
@@ -65,14 +100,6 @@ public abstract class Widget {
 
 	public void setH(float h) {
 		this.h = h;
-	}
-
-	public BitmapFont getFont() {
-		return font;
-	}
-
-	public void setFont(BitmapFont font) {
-		this.font = font;
 	}
 
 	public GlyphLayout getLayout() {
@@ -100,13 +127,9 @@ public abstract class Widget {
 	}
 
 	public abstract void tick();
-	
-	public abstract void render(ShapeRenderer sr, SpriteBatch batch);
-	
-	public abstract void clickDown(int x, int y, int button);
-	
-	public abstract void clickUp(int x, int y, int button);
-	
+
+	public abstract void render(ShapeRenderer sr, BitmapFont font, SpriteBatch batch);
+
 	public abstract void dispose();
-	
+
 }

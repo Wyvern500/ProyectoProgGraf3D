@@ -1,0 +1,2 @@
+cd C:\Users\ivaan\OneDrive\Documentos\Libgdx Projects\Animator
+gradlew desktop:dist

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.lecheros.models.ModelPart;
+import com.lecheros.model.ModelPart;
 
 public class Keyframe {
 
@@ -15,16 +15,22 @@ public class Keyframe {
 	public Map<ModelPart, float[]> rotations;
 	
 	public Keyframe(int dur) {
+		this(dur, -1);
+	}
+	
+	public Keyframe(int dur, int startTick) {
 		this.dur = dur;
+		this.startTick = startTick;
+		this.startVisualTick = startTick + dur;
 		translations = new HashMap<>();
 		rotations = new HashMap<>();
 	}
-	
+
 	public void copyTransformFrom(Keyframe kf) {
 		translations = copyMap(kf.translations);
 		rotations = copyMap(kf.rotations);
 	}
-	
+
 	public Keyframe copy() {
 		Keyframe kf = new Keyframe(dur);
 		kf.startTick = startTick;
@@ -34,13 +40,13 @@ public class Keyframe {
 		return kf;
 	}
 
-	protected Map<ModelPart, float[]> copyMap(Map<ModelPart, float[]> other){
+	protected Map<ModelPart, float[]> copyMap(Map<ModelPart, float[]> other) {
 		Map<ModelPart, float[]> map = new HashMap<>();
-		for(Entry<ModelPart, float[]> entry : other.entrySet()) {
+		for (Entry<ModelPart, float[]> entry : other.entrySet()) {
 			float[] temp = entry.getValue();
 			map.put(entry.getKey(), new float[] { temp[0], temp[1], temp[2] });
 		}
 		return map;
 	}
-	
+
 }
